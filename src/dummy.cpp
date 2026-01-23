@@ -1,0 +1,3 @@
+namespace hyperliquid {
+    void dummy() {}
+}
