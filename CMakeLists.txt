@@ -34,6 +34,8 @@ target_sources(highperliquid
         src/core/stdout_sink.cpp
         src/config/config_loader.cpp
         src/memory/pool.cpp
+        src/net/tcp_socket.cpp
+        src/ws/dummy_ws.cpp
 )
 
 
