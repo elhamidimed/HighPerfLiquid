@@ -8,3 +8,6 @@ cmake-build-*/
 .DS_Store
 
 .compile_commands.json
+
+give_context.py
+context.txt
