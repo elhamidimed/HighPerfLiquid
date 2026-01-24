@@ -1,3 +1,3 @@
 namespace hyperliquid {
-    void dummy() {}
-}
+void dummy() {}
+} // namespace hyperliquid

@@ -6,6 +6,14 @@ project(
     LANGUAGES CXX
 )
 
+find_program(CLANG_TIDY_EXE NAMES clang-tidy)
+if (CLANG_TIDY_EXE)
+    set(CMAKE_CXX_CLANG_TIDY
+        ${CLANG_TIDY_EXE};
+        -warnings-as-errors=*
+    )
+endif()
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
