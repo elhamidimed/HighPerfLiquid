@@ -32,6 +32,7 @@ target_sources(highperliquid
         src/dummy.cpp
         src/core/timestamp.cpp
         src/core/stdout_sink.cpp
+        src/config/config_loader.cpp
 )
 
 
