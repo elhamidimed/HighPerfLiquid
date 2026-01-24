@@ -30,6 +30,7 @@ target_include_directories(highperliquid
 target_sources(highperliquid
     PRIVATE
         src/dummy.cpp
+        src/core/timestamp.cpp
 )
 
 
