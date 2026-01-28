@@ -44,3 +44,60 @@ if (ENABLE_SANITIZERS)
     target_compile_options(highperliquid PRIVATE -fsanitize=address,undefined)
     target_link_options(highperliquid PRIVATE -fsanitize=address,undefined)
 endif()
+
+add_library(simdjson STATIC
+    third_party/simdjson/simdjson.cpp
+)
+
+target_include_directories(simdjson
+    SYSTEM PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/simdjson
+)
+
+target_compile_features(simdjson PUBLIC cxx_std_20)
+
+set_target_properties(simdjson PROPERTIES
+    CXX_CLANG_TIDY ""
+)
+
+set_target_properties(simdjson PROPERTIES
+    COMPILE_WARNING_AS_ERROR OFF
+)
+
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(simdjson PRIVATE -Wno-error -Wno-everything)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(simdjson PRIVATE -Wno-error -w)
+elseif (MSVC)
+    target_compile_options(simdjson PRIVATE /WX- /W0)
+endif()
+
+add_library(hyperliquid_json
+    src/json/l2_book_parser.cpp
+    src/json/json_sanity_main.cpp
+)
+
+target_include_directories(hyperliquid_json
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_link_libraries(hyperliquid_json
+    PRIVATE
+        simdjson
+)
+
+target_link_libraries(highperliquid
+    PRIVATE
+        hyperliquid_json
+)
+
+add_executable(json_sanity
+    src/json/json_sanity_main.cpp
+)
+
+target_link_libraries(json_sanity
+    PRIVATE
+        highperliquid
+        simdjson
+)
