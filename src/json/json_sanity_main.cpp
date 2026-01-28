@@ -45,7 +45,7 @@ int main() {
     event::l2_level_event ev{};
     while (out.pop(ev)) {
         ++count1;
-        std::printf("sym=%s side=%u px=%lld sz=%lld n=%u t=%llu\n", ev.symbol,
+        std::printf("sym=%s side=%u px=%lld sz=%lld n=%u t=%llu\n", ev.symbol.value,
                     static_cast<unsigned>(ev.level_side), static_cast<long long>(ev.price),
                     static_cast<long long>(ev.size), ev.order_count,
                     static_cast<unsigned long long>(ev.exchange_time_ms));

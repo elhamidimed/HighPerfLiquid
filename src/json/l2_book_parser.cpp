@@ -133,7 +133,7 @@ template <std::size_t InN, std::size_t OutN> void l2_book_parser<InN, OutN>::pol
                     continue;
 
                 hyperliquid::event::l2_level_event out{};
-                std::memcpy(out.symbol, symbol, sizeof(out.symbol));
+                std::memcpy(out.symbol.value, symbol, sizeof(out.symbol.value));
                 out.level_side = s;
                 out.price = px_i;
                 out.size = sz_i;
