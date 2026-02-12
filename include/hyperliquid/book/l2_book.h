@@ -42,6 +42,22 @@ template <std::size_t Depth> class l2_book {
         last_update_ms_ = 0;
     }
 
+    void apply_snapshot(const hyperliquid::market::symbol_t &sym,
+                        hyperliquid::market::timestamp_ms_t t_ms,
+                        const std::array<level, Depth> &bids, std::size_t bid_n,
+                        const std::array<level, Depth> &asks, std::size_t ask_n) noexcept {
+        symbol_ = sym;
+        last_update_ms_ = t_ms;
+
+        bid_count_ = (bid_n > Depth) ? Depth : bid_n;
+        ask_count_ = (ask_n > Depth) ? Depth : ask_n;
+
+        for (std::size_t i = 0; i < bid_count_; ++i)
+            bids_[i] = bids[i];
+        for (std::size_t i = 0; i < ask_count_; ++i)
+            asks_[i] = asks[i];
+    }
+
   private:
     hyperliquid::market::symbol_t symbol_{};
     hyperliquid::market::timestamp_ms_t last_update_ms_{0};

@@ -101,3 +101,12 @@ target_link_libraries(json_sanity
         highperliquid
         simdjson
 )
+
+add_executable(book_sanity
+    src/book/book_sanity_main.cpp
+)
+
+target_link_libraries(book_sanity
+    PRIVATE
+        highperliquid
+)
