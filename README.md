@@ -91,7 +91,7 @@ Prices/sizes are parsed deterministically as fixed-point integers (no floats).
 Clone and build with standard CMake:
 
 ```bash
-git clone https://github.com/yourname/HighPerfLiquid.git
+git clone https://github.com/elhamidimed/HighPerfLiquid
 cd HighPerfLiquid
 
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
