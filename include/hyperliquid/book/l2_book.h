@@ -1,9 +1,11 @@
 #pragma once
 
+#include "hyperliquid/book/invariants.h"
 #include "hyperliquid/book/level.h"
 #include "hyperliquid/market/types.h"
 
 #include <array>
+#include <cassert>
 #include <cstddef>
 
 namespace hyperliquid::book {
@@ -56,6 +58,14 @@ template <std::size_t Depth> class l2_book {
             bids_[i] = bids[i];
         for (std::size_t i = 0; i < ask_count_; ++i)
             asks_[i] = asks[i];
+
+#ifndef NDEBUG
+        // Invariants: Hyperliquid snapshots are expected ordered.
+        assert(sizes_non_negative(bids_.data(), bid_count_));
+        assert(sizes_non_negative(asks_.data(), ask_count_));
+        assert(bids_sorted_desc(bids_.data(), bid_count_));
+        assert(asks_sorted_asc(asks_.data(), ask_count_));
+#endif
     }
 
   private:

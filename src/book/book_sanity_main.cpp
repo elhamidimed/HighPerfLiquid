@@ -39,5 +39,27 @@ int main() {
         return 5;
 
     std::printf("PASS\n");
+#ifndef NDEBUG
+    // Out-of-order bids should trigger assert in debug builds
+    book::l2_book<20> bk2;
+    book::l2_snapshot_builder<20> builder2(bk2);
+
+    event::l2_level_event b1{};
+    market::set_symbol(b1.symbol, "HYPE");
+    b1.exchange_time_ms = 200;
+    b1.level_side = event::side::bid;
+    b1.price = 9'000'000;
+    b1.size = 1'000'000;
+    b1.order_count = 1;
+
+    event::l2_level_event b2 = b1;
+    b2.price = 10'000'000; // higher price comes after => invalid descending order
+
+    builder2.on_level(b1);
+    builder2.on_level(b2);
+    builder2.flush();
+
+    return 10;
+#endif
     return 0;
 }
