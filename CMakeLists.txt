@@ -110,3 +110,12 @@ target_link_libraries(book_sanity
     PRIVATE
         highperliquid
 )
+
+add_executable(pipeline_sanity
+    src/book/pipeline_sanity_main.cpp
+)
+
+target_link_libraries(pipeline_sanity
+    PRIVATE
+        highperliquid
+)
