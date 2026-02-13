@@ -6,6 +6,9 @@ project(
     LANGUAGES CXX
 )
 
+include(CTest)
+enable_testing()
+
 find_program(CLANG_TIDY_EXE NAMES clang-tidy)
 if (CLANG_TIDY_EXE)
     set(CMAKE_CXX_CLANG_TIDY
@@ -119,3 +122,11 @@ target_link_libraries(pipeline_sanity
     PRIVATE
         highperliquid
 )
+
+option(HPL_ENABLE_TESTS "Enable tests" ON)
+
+if (HPL_ENABLE_TESTS)
+  include(CTest)
+  enable_testing()
+  add_subdirectory(tests)
+endif()

@@ -34,3 +34,12 @@ jobs:
       - name: Build
         run: |
           cmake --build build
+
+      - name: Configure (Debug)
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DHPL_ENABLE_TESTS=ON
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
