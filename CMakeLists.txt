@@ -123,6 +123,30 @@ target_link_libraries(pipeline_sanity
         highperliquid
 )
 
+add_executable(latency_sanity
+    src/latency/latency_sanity_main.cpp
+)
+
+target_link_libraries(latency_sanity
+    PRIVATE
+        highperliquid
+)
+
+add_executable(pipeline_latency_sanity
+    src/latency/pipeline_latency_sanity_main.cpp
+)
+
+target_link_libraries(pipeline_latency_sanity
+    PRIVATE
+        highperliquid
+)
+
+target_compile_definitions(pipeline_latency_sanity
+    PRIVATE
+        HPL_ENABLE_LATENCY=1
+)
+
+
 option(HPL_ENABLE_TESTS "Enable tests" ON)
 
 if (HPL_ENABLE_TESTS)
