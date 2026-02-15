@@ -5,7 +5,7 @@
 namespace hyperliquid::event {
 
 struct market_event {
-    std::array<char, 256> data{};
+    std::array<char, 8192> data{};
     std::size_t size = 0;
 };
 

@@ -146,6 +146,12 @@ target_compile_definitions(pipeline_latency_sanity
         HPL_ENABLE_LATENCY=1
 )
 
+option(HPL_ENABLE_BENCHMARKS "Enable benchmarks" OFF)
+
+if (HPL_ENABLE_BENCHMARKS)
+  add_subdirectory(bench)
+endif()
+
 
 option(HPL_ENABLE_TESTS "Enable tests" ON)
 

@@ -17,10 +17,13 @@ template <std::size_t Max> struct padded_msg {
     char buf[Max + simdjson::SIMDJSON_PADDING];
     size_t len{0};
 
-    void load(const char *src, size_t n) noexcept {
-        len = (n > Max) ? Max : n;
+    bool load(const char *src, size_t n) noexcept {
+        if (n > Max)
+            return false;
+        len = n;
         std::memcpy(buf, src, len);
         std::memset(buf + len, 0, simdjson::SIMDJSON_PADDING);
+        return true;
     }
 
     simdjson::padded_string_view view() const noexcept {
@@ -50,8 +53,10 @@ template <std::size_t InN, std::size_t OutN> void l2_book_parser<InN, OutN>::pol
     hyperliquid::event::market_event me{};
 
     while (in_.pop(me)) {
-        padded_msg<256> msg{};
-        msg.load(me.data.data(), me.size);
+        padded_msg<8192> msg{};
+        if (!msg.load(me.data.data(), me.size)) {
+            continue; // dropping oversized message
+        }
 
         auto doc_res = parser.iterate(msg.buf, msg.len, msg.capacity());
         if (doc_res.error()) {
@@ -166,5 +171,6 @@ template <std::size_t InN, std::size_t OutN> void l2_book_parser<InN, OutN>::pol
 // For the sanity executable, I'll explicitly instantiate one concrete size pair.
 template class l2_book_parser<1024, 65536>;
 template class l2_book_parser<16, 4096>;
+template class l2_book_parser<64, 8192>;
 
 } // namespace hyperliquid::json
