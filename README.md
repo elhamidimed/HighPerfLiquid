@@ -20,6 +20,18 @@ Order book + trading features are coming next.
 
 ---
 
+## Current Results
+- CPU: Intel i5-9600KF
+- OS: Ubuntu 22.04 (kernel 6.x)
+- Compiler: clang++ 17
+- Build: Release
+
+|                    Benchmark | Throughput (msg/s) |     Mean |    p50 |    p99 |   p999 | Notes                |
+| ---------------------------: | -----------------: | -------: | -----: | -----: | -----: | -------------------- |
+| Parser poll (20×20 snapshot) |               9153 | 107.8 µs |  65 µs | 131 µs | 262 µs | simdjson ondemand    |
+|     Updater poll (40 levels) |            359,956 |  1.82 µs | 1–2 µs | 1–2 µs |  16 µs | snapshot overwrite   |
+|          End-to-end pipeline |               9141 | 108.7 µs |  65 µs | 131 µs | 262 µs | dominated by parsing |
+
 ## Why this exists
 
 Most exchange API wrappers are either:
