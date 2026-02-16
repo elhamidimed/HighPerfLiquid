@@ -11,3 +11,4 @@ cmake-build-*/
 
 give_context.py
 context.txt
+auto_commit.sh

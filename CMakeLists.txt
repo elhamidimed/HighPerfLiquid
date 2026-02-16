@@ -165,3 +165,8 @@ add_executable(trading_model_sanity
     src/trading/trading_model_sanity_main.cpp
 )
 target_link_libraries(trading_model_sanity PRIVATE highperliquid)
+
+add_executable(place_order_payload_sanity
+    src/execution/place_order_payload_sanity_main.cpp
+)
+target_link_libraries(place_order_payload_sanity PRIVATE highperliquid)
