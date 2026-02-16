@@ -160,3 +160,8 @@ if (HPL_ENABLE_TESTS)
   enable_testing()
   add_subdirectory(tests)
 endif()
+
+add_executable(trading_model_sanity
+    src/trading/trading_model_sanity_main.cpp
+)
+target_link_libraries(trading_model_sanity PRIVATE highperliquid)
