@@ -1,6 +1,7 @@
 #include "hyperliquid/json/order_updates_parser.h"
 
 #include "hyperliquid/json/l2_book_parser.h"
+#include "hyperliquid/json/padded_msg.h"
 #include "hyperliquid/market/symbol.h"
 
 #include <simdjson.h>
@@ -132,7 +133,7 @@ template <std::size_t InN, std::size_t OutN> void order_updates_parser<InN, OutN
     }
 }
 
-// explicit instantiations (add the ones you use)
+// explicit instantiations
 template class order_updates_parser<16, 1024>;
 
 } // namespace hyperliquid::json

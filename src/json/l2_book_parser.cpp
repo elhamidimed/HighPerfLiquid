@@ -1,5 +1,6 @@
 #include "hyperliquid/json/l2_book_parser.h"
 #include "hyperliquid/json/fixed_point.h"
+#include "hyperliquid/json/padded_msg.h"
 
 #include <simdjson.h>
 
@@ -9,31 +10,6 @@
 namespace hyperliquid::json {
 
 namespace {
-
-// Fixed buffer for simdjson: input + required padding.
-// (No heap; per-message stack copy.)
-
-template <std::size_t Max> struct padded_msg {
-    char buf[Max + simdjson::SIMDJSON_PADDING];
-    size_t len{0};
-
-    bool load(const char *src, size_t n) noexcept {
-        if (n > Max)
-            return false;
-        len = n;
-        std::memcpy(buf, src, len);
-        std::memset(buf + len, 0, simdjson::SIMDJSON_PADDING);
-        return true;
-    }
-
-    simdjson::padded_string_view view() const noexcept {
-        return simdjson::padded_string_view(buf, len);
-    }
-
-    constexpr size_t capacity() const noexcept {
-        return sizeof(buf);
-    }
-};
 
 inline bool copy_symbol_5(char (&dst)[6], std::string_view sym) noexcept {
     if (sym.size() > 5)

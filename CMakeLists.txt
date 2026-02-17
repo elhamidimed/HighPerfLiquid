@@ -78,6 +78,7 @@ endif()
 add_library(hyperliquid_json
     src/json/l2_book_parser.cpp
     src/json/json_sanity_main.cpp
+    src/json/order_updates_parser.cpp
 )
 
 target_include_directories(hyperliquid_json
@@ -170,3 +171,8 @@ add_executable(place_order_payload_sanity
     src/execution/place_order_payload_sanity_main.cpp
 )
 target_link_libraries(place_order_payload_sanity PRIVATE highperliquid)
+
+add_executable(order_updates_sanity
+    src/json/order_updates_sanity_main.cpp
+)
+target_link_libraries(order_updates_sanity PRIVATE highperliquid)
