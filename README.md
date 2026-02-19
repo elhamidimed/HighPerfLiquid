@@ -159,14 +159,15 @@ Progress so far:
 * [x] WebSocket client
 * [x] JSON parsing layer (simdjson)
 * [x] Market data event model
+* [x] Order book data structure
+* [x] Snapshot update logic
+* [x] Book correctness tests
+* [x] Latency instrumentation
+* [x] Benchmarks
 
 Next steps:
 
-* [ ] Order book data structure
-* [ ] Snapshot update logic
-* [ ] Book correctness tests
-* [ ] Latency instrumentation
-* [ ] Benchmarks
+
 * [ ] Trading + execution layers
 
 ---
