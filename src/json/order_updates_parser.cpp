@@ -8,6 +8,10 @@
 
 #include <cstring>
 
+#ifndef HPL_ORDER_UPDATES_DEBUG
+#define HPL_ORDER_UPDATES_DEBUG 0
+#endif
+
 namespace hyperliquid::json {
 
 template <std::size_t InN, std::size_t OutN>
@@ -39,7 +43,13 @@ template <std::size_t InN, std::size_t OutN> void order_updates_parser<InN, OutN
     simdjson::ondemand::parser parser;
 
     hyperliquid::event::market_event me{};
+#if HPL_ORDER_UPDATES_DEBUG
+    std::size_t seen = 0, bad_json = 0, bad_channel = 0, bad_data = 0, emitted = 0;
+#endif
     while (in_.pop(me)) {
+#if HPL_ORDER_UPDATES_DEBUG
+        ++seen;
+#endif
 
         // might adjust size later
         padded_msg<4096> msg{};
@@ -49,22 +59,34 @@ template <std::size_t InN, std::size_t OutN> void order_updates_parser<InN, OutN
 
         auto doc_res = parser.iterate(msg.view());
         if (doc_res.error()) {
+#if HPL_ORDER_UPDATES_DEBUG
+            ++bad_json;
+#endif
             continue;
         }
         simdjson::ondemand::document &doc = doc_res.value_unsafe();
 
         // channel check
         auto ch = doc["channel"].get_string();
-        if (ch.error())
+        if (ch.error()) {
+#if HPL_ORDER_UPDATES_DEBUG
+            ++bad_channel;
+#endif
             continue;
+        }
+
         const std::string_view channel = ch.value_unsafe();
         if (channel != "orderUpdates")
             continue;
 
         // data is WsOrder[]
         auto data = doc["data"].get_array();
-        if (data.error())
+        if (data.error()) {
+#if HPL_ORDER_UPDATES_DEBUG
+            ++bad_data;
+#endif
             continue;
+        }
 
         for (auto wsorder : data.value_unsafe()) {
             // status + statusTimestamp
@@ -112,6 +134,9 @@ template <std::size_t InN, std::size_t OutN> void order_updates_parser<InN, OutN
                 ev.ack.exchange_time_ms = status_ts;
 
                 out_.push(ev);
+#if HPL_ORDER_UPDATES_DEBUG
+                ++emitted;
+#endif
             } else if (status_is_reject(status)) {
                 ev.type = hyperliquid::trading::order_event_type::reject;
                 ev.reject.client_id = cid;
@@ -126,11 +151,21 @@ template <std::size_t InN, std::size_t OutN> void order_updates_parser<InN, OutN
                 std::memcpy(ev.reject.message, status.data(), n);
 
                 out_.push(ev);
+#if HPL_ORDER_UPDATES_DEBUG
+                ++emitted;
+#endif
             } else {
                 // ignore other statuses for now, might adjust later
             }
         }
     }
+#if HPL_ORDER_UPDATES_DEBUG
+    if (emitted == 0) {
+        std::printf("[order_updates_parser] seen=%zu bad_json=%zu bad_channel=%zu bad_data=%zu "
+                    "emitted=%zu\n",
+                    seen, bad_json, bad_channel, bad_data, emitted);
+    }
+#endif
 }
 
 // explicit instantiations

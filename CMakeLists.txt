@@ -176,3 +176,5 @@ add_executable(order_updates_sanity
     src/json/order_updates_sanity_main.cpp
 )
 target_link_libraries(order_updates_sanity PRIVATE highperliquid)
+
+target_compile_definitions(order_updates_sanity PRIVATE HPL_ORDER_UPDATES_DEBUG=1)
