@@ -177,4 +177,4 @@ add_executable(order_updates_sanity
 )
 target_link_libraries(order_updates_sanity PRIVATE highperliquid)
 
-target_compile_definitions(order_updates_sanity PRIVATE HPL_ORDER_UPDATES_DEBUG=1)
+target_compile_definitions(hyperliquid_json PRIVATE HPL_ORDER_UPDATES_DEBUG=1)

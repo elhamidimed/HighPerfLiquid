@@ -1,6 +1,5 @@
 #include "hyperliquid/json/order_updates_parser.h"
 
-#include "hyperliquid/json/l2_book_parser.h"
 #include "hyperliquid/json/padded_msg.h"
 #include "hyperliquid/market/symbol.h"
 
