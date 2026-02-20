@@ -56,10 +56,12 @@ template <std::size_t InN, std::size_t OutN> void order_updates_parser<InN, OutN
             continue; // dropping oversized
         }
 
-        auto doc_res = parser.iterate(msg.view());
+        auto doc_res = parser.iterate(msg.data(), msg.size(), msg.capacity());
         if (doc_res.error()) {
 #if HPL_ORDER_UPDATES_DEBUG
             ++bad_json;
+            std::printf("[order_updates_parser] iterate error: %s\n",
+                        simdjson::error_message(doc_res.error()));
 #endif
             continue;
         }

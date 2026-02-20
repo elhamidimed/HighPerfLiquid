@@ -12,8 +12,6 @@ namespace hyperliquid::json {
 // (No heap; per-message stack copy.)
 
 template <std::size_t Max> struct padded_msg {
-    char buf[Max + simdjson::SIMDJSON_PADDING];
-    size_t len{0};
 
     bool load(const char *src, size_t n) noexcept {
         if (n > Max)
@@ -24,12 +22,17 @@ template <std::size_t Max> struct padded_msg {
         return true;
     }
 
-    simdjson::padded_string_view view() const noexcept {
-        return simdjson::padded_string_view(buf, len);
-    }
-
     constexpr size_t capacity() const noexcept {
         return sizeof(buf);
     }
+    const char *data() const noexcept {
+        return buf;
+    }
+    std::size_t size() const noexcept {
+        return len;
+    }
+
+    char buf[Max + simdjson::SIMDJSON_PADDING];
+    size_t len{0};
 };
 } // namespace hyperliquid::json
