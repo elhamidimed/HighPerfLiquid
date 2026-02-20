@@ -17,6 +17,11 @@ template <std::size_t InN, std::size_t OutN>
 order_updates_parser<InN, OutN>::order_updates_parser(in_buffer_t &in, out_buffer_t &out) noexcept
     : in_(in), out_(out) {}
 
+static inline bool status_is_cancel(std::string_view s) noexcept {
+    // check substring "cancel"
+    return s.find("cancel") != std::string_view::npos;
+}
+
 static inline void set_venue_id_from_oid(hyperliquid::trading::venue_order_id &vid,
                                          std::uint64_t oid) noexcept {
     // decimal into fixed buffer
@@ -150,6 +155,16 @@ template <std::size_t InN, std::size_t OutN> void order_updates_parser<InN, OutN
                                           ? status.size()
                                           : (sizeof(ev.reject.message) - 1);
                 std::memcpy(ev.reject.message, status.data(), n);
+
+                out_.push(ev);
+#if HPL_ORDER_UPDATES_DEBUG
+                ++emitted;
+#endif
+            } else if (status_is_cancel(status)) {
+                ev.type = hyperliquid::trading::order_event_type::cancel_ack;
+                ev.cancel.client_id = cid;
+                set_venue_id_from_oid(ev.cancel.venue_id, oid);
+                ev.cancel.exchange_time_ms = status_ts;
 
                 out_.push(ev);
 #if HPL_ORDER_UPDATES_DEBUG

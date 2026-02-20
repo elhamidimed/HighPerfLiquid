@@ -79,6 +79,7 @@ add_library(hyperliquid_json
     src/json/l2_book_parser.cpp
     src/json/json_sanity_main.cpp
     src/json/order_updates_parser.cpp
+    src/json/user_fills_parser.cpp
 )
 
 target_include_directories(hyperliquid_json
@@ -178,3 +179,8 @@ add_executable(order_updates_sanity
 target_link_libraries(order_updates_sanity PRIVATE highperliquid)
 
 target_compile_definitions(hyperliquid_json PRIVATE HPL_ORDER_UPDATES_DEBUG=1)
+
+add_executable(user_fills_sanity
+    src/json/user_fills_sanity_main.cpp
+)
+target_link_libraries(user_fills_sanity PRIVATE highperliquid)

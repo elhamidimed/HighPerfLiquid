@@ -14,13 +14,15 @@ int main() {
 
     json::order_updates_parser<16, 1024> p(in, out);
 
-    // One "open" and one "rejected" example (matches WsOrder shape)
+    // One "open" and one "rejected" and one "canceled"
     const char *sample = R"json(
 {"channel":"orderUpdates","data":[
   {"order":{"coin":"HYPE","side":"B","limitPx":"22.46","sz":"1.5","oid":123,"timestamp":1769339484000,"origSz":"1.5","cloid":"cid-001"},
    "status":"open","statusTimestamp":1769339484158},
   {"order":{"coin":"HYPE","side":"B","limitPx":"22.46","sz":"1.5","oid":124,"timestamp":1769339484000,"origSz":"1.5","cloid":"cid-002"},
-   "status":"rejected","statusTimestamp":1769339484160}
+   "status":"rejected","statusTimestamp":1769339484160},
+   {"order":{"coin":"HYPE","side":"B","limitPx":"22.46","sz":"1.5","oid":125,"timestamp":1769339484000,"origSz":"1.5","cloid":"cid-003"}, 
+   "status":"canceled", "statusTimestamp":1769339484162}
 ]}
 )json";
 
@@ -42,10 +44,15 @@ int main() {
             std::printf("REJECT cid=%s reason=%u msg=%s t=%llu\n", ev.reject.client_id.value,
                         (unsigned)ev.reject.reason, ev.reject.message,
                         (unsigned long long)ev.reject.exchange_time_ms);
+        } else if (ev.type == trading::order_event_type::cancel_ack) {
+            std::printf("CANCEL_ACK cid=%s vid=%s t=%llu\n", ev.cancel.client_id.value,
+                        ev.cancel.venue_id.value, (unsigned long long)ev.cancel.exchange_time_ms);
+        } else {
+            std::printf("UNKNOWN_EVENT_TYPE %u\n", (unsigned)ev.type);
         }
     }
 
-    if (n != 2) {
+    if (n != 3) {
         std::printf("FAIL emitted=%zu\n", n);
         return 1;
     }
