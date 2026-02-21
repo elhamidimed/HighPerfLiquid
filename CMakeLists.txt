@@ -88,12 +88,12 @@ target_include_directories(hyperliquid_json
 )
 
 target_link_libraries(hyperliquid_json
-    PRIVATE
+    PUBLIC
         simdjson
 )
 
 target_link_libraries(highperliquid
-    PRIVATE
+    PUBLIC
         hyperliquid_json
 )
 
@@ -184,3 +184,8 @@ add_executable(user_fills_sanity
     src/json/user_fills_sanity_main.cpp
 )
 target_link_libraries(user_fills_sanity PRIVATE highperliquid)
+
+add_executable(execution_pipeline_sanity
+    src/execution/execution_pipeline_sanity_main.cpp
+)
+target_link_libraries(execution_pipeline_sanity PRIVATE highperliquid)

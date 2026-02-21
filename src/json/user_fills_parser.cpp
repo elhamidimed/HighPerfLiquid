@@ -83,10 +83,10 @@ template <std::size_t InN, std::size_t OutN> void user_fills_parser<InN, OutN>::
 
             std::int64_t px_i = 0;
             std::int64_t sz_i = 0;
-            const hyperliquid::market::price_t fill_px =
-                parse_decimal_1e6(pxs.data(), pxs.size(), px_i);
-            const hyperliquid::market::qty_t fill_sz =
-                parse_decimal_1e6(szs.data(), szs.size(), sz_i);
+            if (!parse_decimal_1e6(pxs.data(), pxs.size(), px_i))
+                continue;
+            if (!parse_decimal_1e6(szs.data(), szs.size(), sz_i))
+                continue;
 
             // optional cloid
             hyperliquid::trading::client_order_id cid{};
@@ -106,8 +106,8 @@ template <std::size_t InN, std::size_t OutN> void user_fills_parser<InN, OutN>::
             ev.fill.client_id = cid;
             set_venue_id_from_oid(ev.fill.venue_id, oid);
             ev.fill.s = s;
-            ev.fill.fill_price = fill_px;
-            ev.fill.fill_qty = fill_sz;
+            ev.fill.fill_price = px_i;
+            ev.fill.fill_qty = sz_i;
             ev.fill.cum_qty = 0;
             ev.fill.exchange_time_ms = tms;
 
