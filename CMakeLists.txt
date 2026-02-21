@@ -189,3 +189,8 @@ add_executable(execution_pipeline_sanity
     src/execution/execution_pipeline_sanity_main.cpp
 )
 target_link_libraries(execution_pipeline_sanity PRIVATE highperliquid)
+
+add_executable(risk_sanity
+    src/risk/risk_sanity_main.cpp
+)
+target_link_libraries(risk_sanity PRIVATE highperliquid)
