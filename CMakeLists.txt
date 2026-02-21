@@ -194,3 +194,8 @@ add_executable(risk_sanity
     src/risk/risk_sanity_main.cpp
 )
 target_link_libraries(risk_sanity PRIVATE highperliquid)
+
+add_executable(submit_order_sanity
+    src/execution/submit_order_sanity_main.cpp
+)
+target_link_libraries(submit_order_sanity PRIVATE highperliquid)
