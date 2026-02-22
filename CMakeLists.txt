@@ -218,3 +218,8 @@ add_executable(wss_handshake_sanity
     src/ws/wss_handshake_sanity_main.cpp
 )
 target_link_libraries(wss_handshake_sanity PRIVATE highperliquid)
+
+add_executable(live_l2book
+    src/examples/live_l2book_main.cpp
+)
+target_link_libraries(live_l2book PRIVATE highperliquid)

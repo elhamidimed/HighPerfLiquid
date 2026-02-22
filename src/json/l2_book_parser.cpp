@@ -146,6 +146,7 @@ template <std::size_t InN, std::size_t OutN> void l2_book_parser<InN, OutN>::pol
 
 // For the sanity executable, I'll explicitly instantiate one concrete size pair.
 template class l2_book_parser<1024, 65536>;
+template class l2_book_parser<256, 65536>;
 template class l2_book_parser<16, 4096>;
 template class l2_book_parser<64, 8192>;
 
