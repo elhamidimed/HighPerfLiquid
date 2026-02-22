@@ -364,10 +364,9 @@ ws_status wss_client::parse_one_frame_(text_view &out) noexcept {
         open_ = false;
         return ws_status::closed;
     }
-    if (opcode == 0x9) { // ping -> pong
-        // ignore payload and send empty pong
-        //  (good enough; can improve later)
-        (void)send_text(""); // NOT correct pong, fix
+    if (opcode == 0x9) { // ping
+        std::string_view pl(msg_, msg_len_);
+        (void)send_pong(pl);
         return ws_status::would_block;
     }
     if (opcode == 0xA) { // pong
@@ -385,6 +384,49 @@ ws_status wss_client::parse_one_frame_(text_view &out) noexcept {
 
     // ignore other opcodes
     return ws_status::would_block;
+}
+
+bool wss_client::send_pong(std::string_view payload) noexcept {
+    if (!open_)
+        return false;
+
+    std::uint8_t hdr[14];
+    std::size_t hlen = 0;
+    hdr[0] = 0x8A; // FIN=1, opcode=PONG
+
+    if (payload.size() <= 125) {
+        hdr[1] = 0x80 | std::uint8_t(payload.size());
+        hlen = 2;
+    } else if (payload.size() <= 0xFFFF) {
+        hdr[1] = 0x80 | 126;
+        hdr[2] = (payload.size() >> 8) & 0xFF;
+        hdr[3] = (payload.size()) & 0xFF;
+        hlen = 4;
+    } else {
+        return false; // control frames must be <=125 by RFC, so just reject
+    }
+
+    std::uint8_t mask[4];
+    std::uint64_t x = reinterpret_cast<std::uintptr_t>(this) ^ 0x11223344ULL;
+    for (int i = 0; i < 4; ++i) {
+        x ^= x << 13;
+        x ^= x >> 7;
+        x ^= x << 17;
+        mask[i] = std::uint8_t(x & 0xFF);
+    }
+    std::memcpy(hdr + hlen, mask, 4);
+    hlen += 4;
+
+    if (!write_all_((const char *)hdr, hlen))
+        return false;
+
+    for (std::size_t i = 0; i < payload.size(); ++i) {
+        char c = char(payload[i] ^ mask[i & 3]);
+        if (!write_all_(&c, 1))
+            return false;
+    }
+
+    return true;
 }
 
 } // namespace hyperliquid::ws

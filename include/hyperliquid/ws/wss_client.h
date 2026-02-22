@@ -27,6 +27,8 @@ class wss_client {
 
     bool send_text(std::string_view text) noexcept;
 
+    bool send_pong(std::string_view payload) noexcept;
+
     // Poll socket and process one frame. If a text frame is received, returns ws_status::ok and
     ws_status poll(text_view &out) noexcept;
 
