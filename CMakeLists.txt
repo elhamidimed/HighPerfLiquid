@@ -209,3 +209,12 @@ add_executable(tls_sanity
     src/net/tls_sanity_main.cpp
 )
 target_link_libraries(tls_sanity PRIVATE highperliquid)
+
+target_sources(highperliquid PRIVATE
+    src/ws/wss_client.cpp
+)
+
+add_executable(wss_handshake_sanity
+    src/ws/wss_handshake_sanity_main.cpp
+)
+target_link_libraries(wss_handshake_sanity PRIVATE highperliquid)
