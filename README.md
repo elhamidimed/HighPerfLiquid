@@ -148,27 +148,6 @@ This repo is intentionally strict:
 
 Everything is meant to compile cleanly under modern compilers.
 
----
-
-## Roadmap
-
-Progress so far:
-
-* [x] Project bootstrap + build hygiene
-* [x] Ring buffer event pipeline
-* [x] WebSocket client
-* [x] JSON parsing layer (simdjson)
-* [x] Market data event model
-* [x] Order book data structure
-* [x] Snapshot update logic
-* [x] Book correctness tests
-* [x] Latency instrumentation
-* [x] Benchmarks
-
-Next steps:
-
-
-* [ ] Trading + execution layers
 
 ---
 

@@ -47,8 +47,10 @@ class risk_engine {
         // Notional = price * qty / 1e6  (all are 1e6 scaled)
         if (lim_.max_order_notional > 0 && r.type == hyperliquid::trading::order_type::limit) {
             // using 128-bit to avoid overflow
-            __int128 prod = static_cast<__int128>(r.price) * static_cast<__int128>(r.qty);
-            __int128 notional = prod / static_cast<__int128>(hyperliquid::market::k_fixed_scale);
+            __extension__ __int128 prod =
+                static_cast<__int128>(r.price) * static_cast<__int128>(r.qty);
+            __extension__ __int128 notional =
+                prod / static_cast<__int128>(hyperliquid::market::k_fixed_scale);
             if (notional > static_cast<__int128>(lim_.max_order_notional)) {
                 return {0, decision_reason::notional_limit};
             }
