@@ -172,18 +172,6 @@ Next steps:
 
 ---
 
-## Project Philosophy
-
-A few rules I’m trying to follow:
-
-* no hidden allocations in the hot path
-* no “god classes” mixing concerns
-* everything should be testable in isolation
-* infrastructure first, features second
-* commit in small, clean steps
-
----
-
 ## Note
 
 This is still under active development.
