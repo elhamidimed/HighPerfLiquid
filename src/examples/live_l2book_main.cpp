@@ -10,9 +10,17 @@
 
 #include <cstdio>
 #include <cstring>
+#include <string_view>
 
 int main() {
     using namespace hyperliquid;
+
+    std::uint64_t rx_text = 0;
+    std::uint64_t rx_non_text = 0; // currently not used
+    std::uint64_t dropped_oversize = 0;
+    std::uint64_t dropped_raw_full = 0;
+    std::uint64_t skipped_non_l2book = 0;
+    std::uint64_t snapshots_printed = 0;
 
     // --- WS connect ---
     ws::wss_client c;
@@ -51,8 +59,18 @@ int main() {
             continue;
         }
 
+        ++rx_text;
+
+        // cheap channel filter
+        const std::string_view sv(tv.data, tv.size);
+        if (sv.find("\"channel\":\"l2Book\"") == std::string_view::npos) {
+            ++skipped_non_l2book;
+            continue;
+        }
+
         event::market_event me{};
         if (tv.size > me.data.size()) {
+            ++dropped_oversize;
             continue;
         }
         me.size = tv.size;
@@ -74,8 +92,15 @@ int main() {
                         (long long)bb[0].size, (long long)ba[0].price, (long long)ba[0].size);
 
             ++snapshots;
+            ++snapshots_printed;
         }
     }
+
+    std::printf("summary: rx_text=%llu skipped_non_l2book=%llu dropped_oversize=%llu "
+                "dropped_full=%llu printed=%llu\n",
+                (unsigned long long)rx_text, (unsigned long long)skipped_non_l2book,
+                (unsigned long long)dropped_oversize, (unsigned long long)dropped_raw_full,
+                (unsigned long long)snapshots_printed);
 
     std::printf("PASS\n");
     return 0;
