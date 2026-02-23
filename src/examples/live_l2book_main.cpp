@@ -16,7 +16,6 @@ int main() {
     using namespace hyperliquid;
 
     std::uint64_t rx_text = 0;
-    std::uint64_t rx_non_text = 0; // currently not used
     std::uint64_t dropped_oversize = 0;
     std::uint64_t dropped_raw_full = 0;
     std::uint64_t skipped_non_l2book = 0;

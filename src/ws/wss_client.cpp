@@ -166,7 +166,7 @@ bool wss_client::handshake_(std::string_view host, std::string_view path) noexce
 
         const char *p = std::strstr(rx_, "\r\n\r\n");
         if (p) {
-            const std::size_t hdr_len = (p - rx_) + 4;
+            const std::size_t hdr_len = static_cast<std::size_t>(p - rx_ + 4);
             std::string_view hdrs(rx_, hdr_len);
 
             // Must be 101
@@ -318,8 +318,8 @@ ws_status wss_client::parse_one_frame_(text_view &out) noexcept {
         if (rx_len_ < pos + 8)
             return ws_status::would_block;
         len = 0;
-        for (int i = 0; i < 8; ++i)
-            len = (len << 8) | (std::uint8_t)rx_[pos + i];
+        for (std::size_t i = 0; i < 8; ++i)
+            len = (len << 8) | static_cast<std::size_t>(static_cast<std::uint8_t>(rx_[pos + i]));
         pos += 8;
     }
 

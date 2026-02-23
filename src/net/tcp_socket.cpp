@@ -34,7 +34,8 @@ void tcp_socket::close() noexcept {
 net_status tcp_socket::read(char *buffer, std::size_t len, std::size_t &out_bytes) noexcept {
     ssize_t ret = ::recv(fd_, buffer, len, MSG_DONTWAIT);
     if (ret > 0) {
-        out_bytes = ret;
+        out_bytes = static_cast<std::size_t>(ret);
+        ;
         return net_status::ok;
     }
     if (ret == 0) {
@@ -48,7 +49,7 @@ net_status tcp_socket::read(char *buffer, std::size_t len, std::size_t &out_byte
 net_status tcp_socket::write(const char *buffer, std::size_t len, std::size_t &out_bytes) noexcept {
     ssize_t ret = ::send(fd_, buffer, len, MSG_DONTWAIT);
     if (ret >= 0) {
-        out_bytes = ret;
+        out_bytes = static_cast<std::size_t>(ret);
         return net_status::ok;
     }
     out_bytes = 0;
