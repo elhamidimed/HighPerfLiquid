@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
+  <defs>
+    <style>
+      .box { fill: #fff; stroke: #111; stroke-width: 2; }
+      .title { font: 700 18px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; fill: #111; }
+      .text { font: 14px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; fill: #111; }
+      .mono { font: 13px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; fill: #111; }
+      .arrow { stroke: #111; stroke-width: 2; fill: none; marker-end: url(#m); }
+      .small { font: 12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; fill: #111; }
+    </style>
+    <marker id="m" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#111"></path>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="40" y="44" class="title">HighPerfLiquid — Data &amp; Execution Pipelines</text>
+  <text x="40" y="72" class="small">Fixed buffers • Ring buffers • Deterministic memory on hot path</text>
+
+  <!-- Market data lane -->
+  <rect x="40" y="110" width="1120" height="130" class="box"></rect>
+  <text x="60" y="140" class="title">Market Data</text>
+
+  <rect x="70" y="165" width="230" height="55" class="box"></rect>
+  <text x="85" y="197" class="mono">wss_client (mainnet)</text>
+
+  <rect x="340" y="165" width="250" height="55" class="box"></rect>
+  <text x="355" y="197" class="mono">raw ring: market_event</text>
+
+  <rect x="630" y="165" width="220" height="55" class="box"></rect>
+  <text x="645" y="197" class="mono">l2_book_parser</text>
+
+  <rect x="890" y="165" width="250" height="55" class="box"></rect>
+  <text x="905" y="197" class="mono">book_updater → l2_book</text>
+
+  <path d="M300,192 L340,192" class="arrow"></path>
+  <path d="M590,192 L630,192" class="arrow"></path>
+  <path d="M850,192 L890,192" class="arrow"></path>
+
+  <!-- Execution lane -->
+  <rect x="40" y="270" width="1120" height="130" class="box"></rect>
+  <text x="60" y="300" class="title">Execution</text>
+
+  <rect x="70" y="325" width="260" height="55" class="box"></rect>
+  <text x="85" y="357" class="mono">order_request</text>
+
+  <rect x="360" y="325" width="230" height="55" class="box"></rect>
+  <text x="375" y="357" class="mono">risk_engine</text>
+
+  <rect x="620" y="325" width="250" height="55" class="box"></rect>
+  <text x="635" y="357" class="mono">payload builder</text>
+
+  <rect x="910" y="325" width="230" height="55" class="box"></rect>
+  <text x="925" y="357" class="mono">wss_client (testnet)</text>
+
+  <path d="M330,352 L360,352" class="arrow"></path>
+  <path d="M590,352 L620,352" class="arrow"></path>
+  <path d="M870,352 L910,352" class="arrow"></path>
+</svg>

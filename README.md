@@ -50,25 +50,10 @@ This project is meant to be the opposite:
 
 ---
 
-## Current Pipeline (so far)
+## Current Pipeline
 
-The architecture is intentionally simple:
+![Architecture](docs/assets/architecture.svg)
 
-```
-WebSocket Client
-    ↓ raw messages
-RingBuffer<market_event>
-    ↓
-JSON Parser Stage (simdjson ondemand)
-    ↓ typed events
-RingBuffer<l2_level_event>
-    ↓
-(Order Book currently in development)
-```
-
-Market data parsing is isolated as its own stage, which makes it easier to test and keeps latency predictable.
-
----
 
 ## Supported Messages
 
