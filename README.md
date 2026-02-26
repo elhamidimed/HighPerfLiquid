@@ -11,10 +11,10 @@ The goal of this project is to be a production-grade C++ codebase that stays:
 
 Right now the library supports:
 
-✅ WebSocket market data ingestion
-✅ Fast JSON parsing using simdjson
-✅ Typed L2 book level events (bid/ask)
-✅ Ring-buffer based event pipeline
+* WebSocket market data ingestion
+* Fast JSON parsing using simdjson
+* Typed L2 book level events (bid/ask)
+* Ring-buffer based event pipeline
 
 Order book + trading features are coming next.
 
@@ -28,8 +28,8 @@ Order book + trading features are coming next.
 
 |                    Benchmark | Throughput (msg/s) |     Mean |    p50 |    p99 |   p999 | Notes                |
 | ---------------------------: | -----------------: | -------: | -----: | -----: | -----: | -------------------- |
-| Parser poll (20×20 snapshot) |               9153 | 107.8 µs |  65 µs | 131 µs | 262 µs | simdjson ondemand    |
-|     Updater poll (40 levels) |            359,956 |  1.82 µs | 1–2 µs | 1–2 µs |  16 µs | snapshot overwrite   |
+| Socket Parser (20×20 snapshot) |               9153 | 107.8 µs |  65 µs | 131 µs | 262 µs | simdjson ondemand    |
+|     Updater (40 levels) |            359,956 |  1.82 µs | 1–2 µs | 1–2 µs |  16 µs | snapshot overwrite   |
 |          End-to-end pipeline |               9141 | 108.7 µs |  65 µs | 131 µs | 262 µs | dominated by parsing |
 
 ## Why this exists
@@ -117,16 +117,16 @@ cmake --build build
 A small executable exists to verify parsing works:
 
 ```bash
-./build/json_sanity
+./build/examples/live_l2book 
 ```
 
 Expected output:
 
 ```
-case1_emitted=2
-case2_emitted=0
-case3_emitted=0
-PASS
+t=1772135275363 bid=28550000 x 26460000 | ask=28551000 x 204630000
+t=1772135275895 bid=28550000 x 168370000 | ask=28551000 x 204630000
+t=1772135276432 bid=28550000 x 168370000 | ask=28551000 x 204630000
+t=1772135276973 bid=28550000 x 168370000 | ask=28551000 x 204630000
 ```
 
 This validates:
