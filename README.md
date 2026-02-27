@@ -113,13 +113,6 @@ t=1772135275895 bid=28550000 x 168370000 | ask=28551000 x 204630000
 t=1772135276432 bid=28550000 x 168370000 | ask=28551000 x 204630000
 t=1772135276973 bid=28550000 x 168370000 | ask=28551000 x 204630000
 ```
-
-This validates:
-
-* correct L2 parsing
-* wrong channel is ignored
-* malformed messages are dropped safely
-
 ---
 
 ## Tooling Notes
