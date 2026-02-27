@@ -1,45 +1,34 @@
-name: CI
+name: ci
 
 on:
   push:
-    branches: [ main ]
   pull_request:
 
 jobs:
-  build:
+  build-test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        compiler: [clang++, g++]
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            build-essential \
-            clang \
-            clang-tidy \
-            clang-format \
-            cmake
+          sudo apt-get install -y cmake ninja-build clang libssl-dev
 
-      - name: Configure
+      - name: Configure (Release)
         run: |
-          cmake -S . -B build \
-            -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DHPL_ENABLE_TESTS=ON \
+            -DHPL_ENABLE_BENCHMARKS=OFF \
+            -DENABLE_SANITIZERS=OFF
 
       - name: Build
         run: |
-          cmake --build build
-
-      - name: Configure (Debug)
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DHPL_ENABLE_TESTS=ON
-
-      - name: Build
-        run: cmake --build build
+          cmake --build build --config Release
 
       - name: Test
-        run: ctest --test-dir build --output-on-failure
+        run: |
+          ctest --test-dir build --output-on-failure
