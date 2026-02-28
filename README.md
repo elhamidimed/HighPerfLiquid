@@ -1,3 +1,4 @@
+![CI](https://github.com/elhamidimed/HighPerfLiquid/actions/workflows/ci.yml/badge.svg)
 # HighPerfLiquid
 
 HighPerfLiquid is a **high-performance C++20 client library for Hyperliquid**, built with a focus on **ultra-low-latency market data ingestion** and a clean foundation for **HFT-style order book systems**.
