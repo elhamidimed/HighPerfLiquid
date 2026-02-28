@@ -11,6 +11,26 @@ option(ENABLE_SANITIZERS "Enable sanitizers" OFF)
 option(HPL_ENABLE_BENCHMARKS "Enable benchmarks" OFF)
 option(HPL_ENABLE_TESTS "Enable tests" ON)
 
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/HighPerfLiquidConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/HighPerfLiquidConfig.cmake"
+  INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/HighPerfLiquid"
+)
+
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/HighPerfLiquidConfigVersion.cmake"
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY SameMajorVersion
+)
+
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/HighPerfLiquidConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/HighPerfLiquidConfigVersion.cmake"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/HighPerfLiquid"
+)
+
 # Centralized options/warnings/tooling
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(ProjectOptions)

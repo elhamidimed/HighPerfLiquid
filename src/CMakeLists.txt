@@ -1,7 +1,16 @@
 add_library(highperliquid STATIC)
 
-target_include_directories(highperliquid PUBLIC
-  ${PROJECT_SOURCE_DIR}/include
+target_include_directories(highperliquid
+  PUBLIC
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+hpl_apply_project_options(highperliquid)
+
+target_link_libraries(highperliquid PUBLIC
+  simdjson
+  OpenSSL::SSL OpenSSL::Crypto
 )
 
 target_sources(highperliquid PRIVATE
@@ -21,8 +30,23 @@ target_sources(highperliquid PRIVATE
   ${PROJECT_SOURCE_DIR}/src/json/user_fills_parser.cpp
 )
 
-target_link_libraries(highperliquid PUBLIC
-  hpl_options
-  simdjson
-  OpenSSL::SSL OpenSSL::Crypto
+include(GNUInstallDirs)
+
+set(HPL_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/HighPerfLiquid")
+
+install(TARGETS highperliquid simdjson
+  EXPORT HighPerfLiquidTargets
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+install(EXPORT HighPerfLiquidTargets
+  FILE HighPerfLiquidTargets.cmake
+  NAMESPACE HighPerfLiquid::
+  DESTINATION ${HPL_INSTALL_CMAKEDIR}
 )
